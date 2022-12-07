@@ -1,19 +1,22 @@
+#[macro_use]
+extern crate diesel;
+pub mod schema;
+pub mod models;
+
 use actix_web::{get, post, HttpServer, App, web, HttpResponse, Responder};
 use tera::{Tera, Context};
 use serde::{Serialize, Deserialize};
+use diesel::prelude::*;
+use diesel::pg::PgConnection;
+use dotenv::dotenv;
+
+use models::{User, NewUser};
 
 #[derive(Serialize)]
 struct Post {
     title: String,
     link: String,
     autor: String,
-}
-
-#[derive(Debug, Deserialize)]
-struct User {
-    username: String,
-    email: String,
-    password: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -26,6 +29,16 @@ struct Loginuser {
 struct Submission {
     title: String,
     link: String,
+}
+
+fn estabilish_connection() -> PgConnection {
+    dotenv().ok();
+
+    let database_url = std::env::var("DATABASE_URL")
+        .expect("DATABASE_URL must be set");
+    
+    PgConnection::establish(&database_url)
+        .expect(&format!("Error connecting to: {}", database_url))
 }
 
 #[get("/")]
@@ -53,7 +66,7 @@ async fn index(tera: web::Data<Tera>) -> impl Responder {
 }
 
 #[post("/signup")]
-async fn process_signup(data: web::Form<User>) -> impl Responder {
+async fn process_signup(data: web::Form<NewUser>) -> impl Responder {
     println!("{:?}", data);
     HttpResponse::Ok().body(format!("Succesfuly saved user: {}", data.username))
 }
@@ -88,7 +101,7 @@ async fn submission(tera: web::Data<Tera>) -> impl Responder {
 #[post("/submission")]
 async fn process_submission(data: web::Form<Submission>) -> impl Responder {
     println!("{:?}", data);
-    HttpResponse::Ok().body(format!("new sub: {}", data.title))
+    HttpResponse::Ok().body(format!("new sub: {} -> {}", data.title, data.link))
 }
 
 #[actix_web::main]
