@@ -1,15 +1,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="POST">
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" name="username">
+<div style="height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;">
+
+    <div style="background-color: #c4c4c4;
+    min-width: 350px;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2em;
+    text-align: center;
+    border-radius: 1em;">
+
+        <h2 style="margin-top: 0;
+        margin-bottom: 1em;
+        color: #000;">Login</h2>
+
+        <form action="" method="POST">
+
+            <div>
+
+                <label for="username" style="color: #000;
+                display: block;
+                text-align: start;">Username</label>
+                <input type="text" name="username" id="username" style="margin-bottom: 1em;
+                width: 100%;
+                padding: 5px;">
+            
+            </div>
+            
+            <div>
+            
+                <label for="password" style="color: #000;
+                display: block;
+                text-align: start;">Password</label>
+                <input type="password" name="password" id="password" style="margin-bottom: 1em;
+                width: 100%;
+                padding: 5px;">
+            
+            </div>
+            
+            <input type="submit" value="Login" id="login-btn" style="margin-top: 1.2em;
+            width: 50%;
+            padding: 5px;">
+        
+        </form>
+
     </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" name="password">
-    </div>
-    <input type="submit" value="Login">
-</form>
+
+</div>
 {% endblock %}
